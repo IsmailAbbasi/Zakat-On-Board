@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { MapPin, DollarSign, Flag, MessageCircle } from 'lucide-react';
+import { MapPin, Flag, MessageCircle } from 'lucide-react';
 
 export default function PostCard({ post, onReport }) {
     const progress = post.required_amount > 0

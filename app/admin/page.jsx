@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BarChart3, FileText, DollarSign, Flag } from 'lucide-react';
+import { BarChart3, FileText, IndianRupee, Flag } from 'lucide-react';
 
 export default function AdminDashboard() {
     const [stats, setStats] = useState({
@@ -57,56 +57,77 @@ export default function AdminDashboard() {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard Overview</h1>
+            <div className="mb-8">
+                <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
+                <p className="text-gray-500 mt-1">Welcome back, Admin. Here's what's happening today.</p>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600 mb-1">Total Posts</p>
+                            <p className="text-sm font-medium text-gray-500 mb-1">Total Posts</p>
                             <p className="text-3xl font-bold text-gray-900">{stats.totalPosts}</p>
                         </div>
-                        <FileText className="h-12 w-12 text-primary-600" />
+                        <div className="p-3 bg-gray-50 rounded-lg">
+                            <FileText className="h-6 w-6 text-gray-600" />
+                        </div>
                     </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600 mb-1">Pending Posts</p>
+                            <p className="text-sm font-medium text-gray-500 mb-1">Pending Approval</p>
                             <p className="text-3xl font-bold text-yellow-600">{stats.pendingPosts}</p>
                         </div>
-                        <BarChart3 className="h-12 w-12 text-yellow-600" />
+                        <div className="p-3 bg-yellow-50 rounded-lg">
+                            <BarChart3 className="h-6 w-6 text-yellow-600" />
+                        </div>
                     </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600 mb-1">Total Donations</p>
+                            <p className="text-sm font-medium text-gray-500 mb-1">Total Donations</p>
                             <p className="text-3xl font-bold text-green-600">{stats.totalDonations}</p>
                         </div>
-                        <DollarSign className="h-12 w-12 text-green-600" />
+                        <div className="p-3 bg-green-50 rounded-lg">
+                            <IndianRupee className="h-6 w-6 text-green-600" />
+                        </div>
                     </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600 mb-1">Pending Reports</p>
+                            <p className="text-sm font-medium text-gray-500 mb-1">Pending Reports</p>
                             <p className="text-3xl font-bold text-red-600">{stats.pendingReports}</p>
                         </div>
-                        <Flag className="h-12 w-12 text-red-600" />
+                        <div className="p-3 bg-red-50 rounded-lg">
+                            <Flag className="h-6 w-6 text-red-600" />
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Total Amount Raised</h2>
-                <p className="text-4xl font-bold text-primary-600">
-                    ₹{stats.totalAmountRaised.toLocaleString('en-IN')}
-                </p>
-                <p className="text-sm text-gray-600 mt-2">From verified donations</p>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+                <div className="flex items-center justify-between items-start">
+                    <div>
+                        <h2 className="text-lg font-bold text-gray-900 mb-2">Total Amount Raised</h2>
+                        <p className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-400">
+                            ₹{stats.totalAmountRaised.toLocaleString('en-IN')}
+                        </p>
+                        <p className="text-sm text-gray-500 mt-2 flex items-center gap-2">
+                            <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
+                            Verified donations only
+                        </p>
+                    </div>
+                    <div className="p-4 bg-primary-50 rounded-2xl">
+                        <IndianRupee className="h-8 w-8 text-primary-600" />
+                    </div>
+                </div>
             </div>
         </div>
     );
