@@ -15,7 +15,7 @@ When you click "Sign in with Google", you see the Supabase URL and after logging
 **CRITICAL:** You MUST run these SQL files in order:
 
 1. **Go to Supabase Dashboard:** https://supabase.com/dashboard
-2. **Select your project:** farwacrbqgnuojieyold
+2. **Select your project** (your-project-ref)
 3. **Click SQL Editor** (in the left sidebar)
 4. **Create a new query**
 
@@ -65,9 +65,9 @@ This creates the trigger that automatically adds users to `users_profile` table 
    
 6. **Add Authorized Redirect URI:**
    ```
-   https://farwacrbqgnuojieyold.supabase.co/auth/v1/callback
+   https://your-project-ref.supabase.co/auth/v1/callback
    ```
-   ⚠️ **IMPORTANT:** Copy this EXACTLY - no trailing slash!
+   ⚠️ **IMPORTANT:** Replace `your-project-ref` with your actual Supabase project reference, then copy this EXACTLY - no trailing slash!
 
 7. **Click CREATE**
    - You'll see a popup with:
@@ -129,7 +129,7 @@ This creates the trigger that automatically adds users to `users_profile` table 
 1. Check that Google Client ID and Secret are correct in Supabase
 2. Verify the redirect URI in Google Console is EXACTLY:
    ```
-   https://farwacrbqgnuojieyold.supabase.co/auth/v1/callback
+   https://your-project-ref.supabase.co/auth/v1/callback
    ```
 
 ### Issue: Can't access admin panel
@@ -149,7 +149,7 @@ This creates the trigger that automatically adds users to `users_profile` table 
 - [ ] Run `002_rls_policies.sql` in Supabase SQL Editor
 - [ ] Run `003_auth_trigger.sql` in Supabase SQL Editor (**CRITICAL!**)
 - [ ] Create Google OAuth app in Google Console
-- [ ] Add redirect URI: `https://farwacrbqgnuojieyold.supabase.co/auth/v1/callback`
+- [ ] Add redirect URI: `https://your-project-ref.supabase.co/auth/v1/callback`
 - [ ] Get Client ID and Secret from Google
 - [ ] Enable Google provider in Supabase Authentication
 - [ ] Add Google Client ID and Secret to Supabase
@@ -161,12 +161,14 @@ This creates the trigger that automatically adds users to `users_profile` table 
 
 ## Your Supabase URLs
 
-**Project URL:** https://farwacrbqgnuojieyold.supabase.co  
+**Project URL:** https://your-project-ref.supabase.co  
 **Dashboard:** https://supabase.com/dashboard (select your project)  
 **Redirect URI for Google Console:**
 ```
-https://farwacrbqgnuojieyold.supabase.co/auth/v1/callback
+https://your-project-ref.supabase.co/auth/v1/callback
 ```
+
+Replace `your-project-ref` with your actual Supabase project reference ID.
 
 ---
 
