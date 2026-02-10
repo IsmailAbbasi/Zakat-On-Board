@@ -1,36 +1,166 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zakat Onboard - Charity Platform
 
-## Getting Started
+A Next.js and Supabase powered charity platform connecting donors with people in need.
 
-First, run the development server:
+## Features
+
+- **Google OAuth Authentication** - Secure sign-in with Google accounts
+- **Role-Based Access Control** - User and Admin roles with different permissions
+- **Charity Post Management** - Create, view, edit, and delete charity requests
+- **Direct Donations** - Donors send money directly to beneficiaries' UPI/bank accounts
+- **Donation Tracking** - Upload payment proofs and track progress
+- **Image Compression** - Automatic image compression to 1-2 MB
+- **Location-Based Search** - Find charity requests in your area
+- **WhatsApp Integration** - Contact post creators directly via WhatsApp
+- **Report System** - Flag suspicious or fraudulent posts
+- **Admin Panel** - Comprehensive admin dashboard for moderation
+
+## Tech Stack
+
+- **Frontend**: Next.js 14+ (App Router), React, TypeScript
+- **Backend**: Supabase (Authentication, Database, Storage)
+- **Styling**: Tailwind CSS
+- **Image Processing**: browser-image-compression
+- **Icons**: Lucide React
+
+## Setup Instructions
+
+### 1. Prerequisites
+
+- Node.js 18+ installed
+- A Supabase account (free tier works)
+- Google OAuth credentials
+
+### 2. Supabase Setup
+
+#### Create a Supabase Project
+
+1. Go to [Supabase](https://supabase.com) and create a new project
+2. Note down your project URL and anon key
+
+#### Run Database Migrations
+
+1. Go to SQL Editor in your Supabase dashboard
+2. Run the SQL scripts in order:
+   - `supabase/migrations/001_initial_schema.sql`
+   - `supabase/migrations/002_rls_policies.sql`
+
+#### Configure Google OAuth
+
+1. In Supabase Dashboard → Authentication → Providers
+2. Enable Google provider
+3. Add authorized redirect URLs:
+   - `http://localhost:3000/auth/callback` (development)
+   - `https://yourdomain.com/auth/callback` (production)
+
+#### Create Storage Bucket
+
+The RLS policies automatically attempt to create the `charity-images` bucket. If it doesn't exist:
+1. Go to Storage in Supabase Dashboard
+2. Create a new bucket named `charity-images`
+3. Make it public
+
+### 3. Local Development Setup
 
 ```bash
+# Clone or navigate to the project
+cd Zakat-onboard
+
+# Install dependencies (already done if you just set up the project)
+npm install
+
+# Edit .env.local with your Supabase credentials
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000` to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Set Up Admin User
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+After signing in with Google for the first time:
 
-## Learn More
+1. Go to Supabase Dashboard → Table Editor → `users_profile`
+2. Find your user record
+3. Change the `role` column from `user` to `admin`
+4. Save the changes
+5. Sign out and sign back in
 
-To learn more about Next.js, take a look at the following resources:
+You now have admin access!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+/app
+  /admin          - Admin panel pages
+  /api            - API routes
+  /auth/callback  - OAuth callback handler
+  /create         - Create charity post
+  /my-posts       - User's posts
+  /posts          - Post pages
+/components
+  /layout         - Navbar, Footer
+  /ui             - Reusable UI components
+/lib
+  /hooks          - Custom React hooks
+  /supabase       - Supabase client/server setup
+  /utils          - Utility functions
+/supabase
+  /migrations     - Database migration scripts
+```
 
-## Deploy on Vercel
+## Important Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Disclaimers
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This platform facilitates direct peer-to-peer donations. The platform:
+- Does NOT process any payments
+- Does NOT verify all charity requests
+- Is NOT liable for fraudulent activities
+- Users donate at their own risk
+
+Make sure users understand these disclaimers prominently displayed throughout the site.
+
+### Admin Responsibilities
+
+As an admin, you should:
+- Regularly review reported posts
+- Verify donation proofs when possible
+- Delete clearly fraudulent requests
+- Monitor for spam and abuse
+
+### Security
+
+- Admin roles are managed via database, not hardcoded
+- All routes are protected with middleware
+- RLS policies ensure data security
+- File uploads are validated and compressed
+
+## Deployment
+
+### Deploy to Vercel
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+
+# Add environment variables in Vercel dashboard
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+```
+
+### Update OAuth Redirect URLs
+
+After deployment, add your production URL to:
+1. Supabase → Authentication → URL Configuration
+2. Google Cloud Console → OAuth 2.0 Client IDs
+
+## License
+
+This project is provided as-is for charitable purposes.
