@@ -17,11 +17,15 @@ A Next.js and Supabase powered charity platform connecting donors with people in
 
 ## Tech Stack
 
-- **Frontend**: Next.js 14+ (App Router), React, TypeScript
+- **Frontend**: Next.js 16+ (App Router), React, JavaScript (JSX)
 - **Backend**: Supabase (Authentication, Database, Storage)
 - **Styling**: Tailwind CSS
 - **Image Processing**: browser-image-compression
 - **Icons**: Lucide React
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
 
 ## Setup Instructions
 
@@ -66,12 +70,14 @@ The RLS policies automatically attempt to create the `charity-images` bucket. If
 # Clone or navigate to the project
 cd Zakat-onboard
 
-# Install dependencies (already done if you just set up the project)
+# Install dependencies
 npm install
 
-# Edit .env.local with your Supabase credentials
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+# Copy environment template and add your credentials
+cp .env.example .env.local
+# Then edit .env.local with your Supabase credentials:
+# NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+# NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 # Run the development server
 npm run dev
