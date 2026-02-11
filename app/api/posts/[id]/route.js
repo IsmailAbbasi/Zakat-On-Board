@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { createClient as createServiceClient } from '@supabase/supabase-js';
 
 // GET /api/posts/[id] - Get single post
 export async function GET(request, context) {
@@ -56,7 +57,16 @@ export async function PATCH(request, context) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const { data, error } = await supabase
+    // Use service role for admin operations
+    const client = isAdmin 
+      ? createServiceClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL,
+          process.env.SUPABASE_SERVICE_ROLE_KEY,
+          { auth: { autoRefreshToken: false, persistSession: false } }
+        )
+      : supabase;
+
+    const { data, error } = await client
       .from('charity_posts')
       .update(body)
       .eq('id', params.id)
@@ -107,7 +117,16 @@ export async function DELETE(request, context) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  const { error } = await supabase
+  // Use service role for admin operations to bypass RLS
+  const client = isAdmin 
+    ? createServiceClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_ROLE_KEY,
+        { auth: { autoRefreshToken: false, persistSession: false } }
+      )
+    : supabase;
+
+  const { error } = await client
     .from('charity_posts')
     .delete()
     .eq('id', params.id);

@@ -28,20 +28,25 @@ export default function AdminPosts() {
 
   const handleStatusChange = async (postId, newStatus) => {
     try {
+      console.log('Updating status for post:', postId, 'to:', newStatus);
       const response = await fetch('/api/admin/update-status', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ post_id: postId, status: newStatus })
       });
 
+      const data = await response.json();
+
       if (response.ok) {
+        console.log('✅ Status updated successfully');
         fetchPosts();
       } else {
-        alert('Failed to update status');
+        console.error('❌ Failed to update status:', data.error);
+        alert(`Failed to update status: ${data.error || 'Unknown error'}`);
       }
     } catch (error) {
-      console.error('Error updating status:', error);
-      alert('Error updating status');
+      console.error('💥 Error updating status:', error);
+      alert('Error updating status. Check console for details.');
     }
   };
 

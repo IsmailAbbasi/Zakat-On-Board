@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function AdminLayout({ children }) {
     const router = useRouter();
-    const { user, isAdmin, loading } = useUser();
+    const { user, isAdmin, loading, rawProfile } = useUser();
 
     if (loading) {
         return <div className="min-h-screen flex items-center justify-center">
@@ -15,9 +15,52 @@ export default function AdminLayout({ children }) {
         </div>;
     }
 
-    if (!user || !isAdmin) {
-        router.push('/');
-        return null;
+    if (!loading && (!user || !isAdmin)) {
+        // router.push('/'); // Commented out for debugging
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
+                <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+                    <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                        <Flag className="h-6 w-6 text-red-600" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
+                    <p className="text-gray-600 mb-6">
+                        You do not have permission to view this page.
+                    </p>
+
+                    <div className="bg-gray-100 p-4 rounded-lg text-left text-xs font-mono mb-6 overflow-auto">
+                        <p><strong>User:</strong> {user ? user.email : 'Not logged in'}</p>
+                        <p><strong>User ID:</strong> {user ? user.id : 'N/A'}</p>
+                        <p><strong>Is Admin:</strong> {isAdmin ? 'Yes' : 'No'}</p>
+                        <p><strong>Loading:</strong> {loading ? 'Yes' : 'No'}</p>
+                        {/* Debug Info */}
+                        <div className="mt-2 pt-2 border-t border-gray-300">
+                            <p className="font-bold text-red-600">Debug Info:</p>
+                            <pre className="whitespace-pre-wrap text-gray-700 text-xs text-left bg-gray-200 p-2 rounded mt-1">
+                                {JSON.stringify({
+                                    isAdminState: isAdmin,
+                                    userRole: user ? 'checked' : 'no_user',
+                                    profileData: rawProfile || 'NULL (No profile found)',
+                                    check: user?.id === 'cd259a33-f2fc-4fd7-87f9-1965fb109db5' ? 'MATCH' : 'NO_MATCH'
+                                }, null, 2)}
+                            </pre>
+                            <p className="text-gray-500 italic mt-1 text-xs">
+                                {rawProfile === null
+                                    ? "Profile is NULL: Run the trigger/insert SQL."
+                                    : (rawProfile?.role !== 'admin' ? "Role is NOT admin: Run the UPDATE SQL." : "Role IS admin: Check logic.")}
+                            </p>
+                        </div>
+                    </div>
+
+                    <Link
+                        href="/"
+                        className="inline-flex justify-center w-full px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium"
+                    >
+                        Return to Home
+                    </Link>
+                </div>
+            </div>
+        );
     }
 
     return (

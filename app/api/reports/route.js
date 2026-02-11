@@ -8,6 +8,7 @@ export async function GET(request) {
   const { data, error } = await supabase
     .from('reports')
     .select('*, users_profile(full_name, email), charity_posts(person_name, reason)')
+    .eq('status', 'pending')
     .order('created_at', { ascending: false });
 
   if (error) {
