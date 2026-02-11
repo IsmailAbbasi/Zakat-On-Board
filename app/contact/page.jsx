@@ -29,7 +29,7 @@ export default function ContactPage() {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    access_key: 'c6c2d680-7e3d-472d-8d8e-e0a2e1db34f8',
+                    access_key: process.env.NEXT_PUBLIC_WEB3FORMS_KEY,
                     subject: `[Zakat Onboard] ${formData.subject}`,
                     from_name: formData.name,
                     email: formData.email,
