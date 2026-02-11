@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { MapPin, IndianRupee, Calendar, User } from 'lucide-react';
+import DonateButton from '@/components/DonateButton';
 
 export default function PostDetailPage() {
     const params = useParams();
@@ -84,6 +85,17 @@ export default function PostDetailPage() {
 
                     {/* Content */}
                     <div className="p-8">
+                        {/* Image (if exists) */}
+                        {post.image_url && (
+                            <div className="mb-8">
+                                <img
+                                    src={post.image_url}
+                                    alt={post.person_name}
+                                    className="w-full h-80 object-cover rounded-xl"
+                                />
+                            </div>
+                        )}
+
                         {/* Progress */}
                         <div className="mb-8">
                             <div className="flex justify-between items-center mb-2">
@@ -152,12 +164,19 @@ export default function PostDetailPage() {
                             </div>
                         </div>
 
+                        {/* Donate Button */}
+                        {post.status === 'pending' && (
+                            <div className="mt-6">
+                                <DonateButton postId={post.id} onDonationSubmitted={fetchPost} />
+                            </div>
+                        )}
+
                         {/* Status Badge */}
                         <div className="mt-6 flex justify-between items-center">
                             <span className={`px-4 py-2 rounded-full text-sm font-medium ${post.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                    post.status === 'funded' ? 'bg-green-100 text-green-800' :
-                                        post.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                                            'bg-red-100 text-red-800'
+                                post.status === 'funded' ? 'bg-green-100 text-green-800' :
+                                    post.status === 'completed' ? 'bg-blue-100 text-blue-800' :
+                                        'bg-red-100 text-red-800'
                                 }`}>
                                 {post.status.charAt(0).toUpperCase() + post.status.slice(1)}
                             </span>

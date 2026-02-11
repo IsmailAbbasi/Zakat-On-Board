@@ -70,17 +70,14 @@ export default function Home() {
                         No middlemen, just pure impact. Join our community today.
                     </p>
 
-                    {!user && (
-                        <div className="flex justify-center gap-4">
-                            <button
-                                onClick={() => document.getElementById('search-area').scrollIntoView({ behavior: 'smooth' })}
-                                className="px-8 py-4 bg-primary-600 text-white rounded-full font-bold text-lg hover:bg-primary-700 transition shadow-lg hover:shadow-primary-500/30 flex items-center gap-2"
-                            >
-                                <Heart className="h-5 w-5" fill="currentColor" />
-                                Start Donating
-                            </button>
-                        </div>
-                    )}
+                    <div className="flex justify-center gap-4">
+                        <a
+                            href="/contact"
+                            className="px-8 py-4 bg-primary-600 text-white rounded-full font-bold text-lg hover:bg-primary-700 transition shadow-lg hover:shadow-primary-500/30 flex items-center gap-2"
+                        >
+                            Contact Us
+                        </a>
+                    </div>
                 </div>
             </div>
 

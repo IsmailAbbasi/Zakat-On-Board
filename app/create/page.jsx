@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Upload, X } from 'lucide-react';
 import { useUser } from '@/lib/hooks/useUser';
 import { validateEmail, validatePhone, validateUPI, validateAmount, sanitizeInput } from '@/lib/utils/validators';
+import { compressImage, isValidImageType, isValidFileSize } from '@/lib/utils/image-compression';
 
 export default function CreatePost() {
     const router = useRouter();
@@ -21,6 +22,10 @@ export default function CreatePost() {
         location: ''
     });
 
+    const [image, setImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
+    const [uploadingImage, setUploadingImage] = useState(false);
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -34,6 +39,50 @@ export default function CreatePost() {
         router.push('/');
         return null;
     }
+
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Validate file type
+        if (!isValidImageType(file)) {
+            setError('Please upload a valid image (JPEG, PNG, or WebP)');
+            return;
+        }
+
+        // Validate file size (before compression)
+        if (!isValidFileSize(file, 10)) {
+            setError('Image must be less than 10MB');
+            return;
+        }
+
+        try {
+            setUploadingImage(true);
+            setError('');
+
+            // Compress image to 1MB
+            const compressedFile = await compressImage(file, 1);
+
+            // Create preview
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(compressedFile);
+
+            setImage(compressedFile);
+        } catch (err) {
+            console.error('Image compression error:', err);
+            setError('Failed to process image');
+        } finally {
+            setUploadingImage(false);
+        }
+    };
+
+    const removeImage = () => {
+        setImage(null);
+        setImagePreview(null);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -74,6 +123,27 @@ export default function CreatePost() {
         setLoading(true);
 
         try {
+            let imageUrl = null;
+
+            // Upload image first if present
+            if (image) {
+                const imageFormData = new FormData();
+                imageFormData.append('file', image);
+                imageFormData.append('bucket', 'donation-requests');
+
+                const uploadResponse = await fetch('/api/upload-image', {
+                    method: 'POST',
+                    body: imageFormData
+                });
+
+                if (uploadResponse.ok) {
+                    const { url } = await uploadResponse.json();
+                    imageUrl = url;
+                } else {
+                    throw new Error('Failed to upload image');
+                }
+            }
+
             const response = await fetch('/api/posts', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -82,7 +152,8 @@ export default function CreatePost() {
                     required_amount: amount,
                     person_name: sanitizeInput(formData.person_name),
                     reason: sanitizeInput(formData.reason),
-                    location: formData.location ? sanitizeInput(formData.location) : null
+                    location: formData.location ? sanitizeInput(formData.location) : null,
+                    image_url: imageUrl
                 })
             });
 
@@ -144,6 +215,53 @@ export default function CreatePost() {
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                 required
                             />
+                        </div>
+
+                        {/* Image Upload (Optional) */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Image (Optional)
+                            </label>
+                            <p className="text-xs text-gray-500 mb-2">Upload a relevant image (will be compressed to 1MB)</p>
+
+                            {!imagePreview ? (
+                                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <Upload className="h-8 w-8 text-gray-400 mb-2" />
+                                        <p className="text-sm text-gray-500">Click to upload image</p>
+                                        <p className="text-xs text-gray-400">JPEG, PNG or WebP (max 10MB)</p>
+                                    </div>
+                                    <input
+                                        type="file"
+                                        accept="image/jpeg,image/png,image/webp"
+                                        onChange={handleImageChange}
+                                        className="hidden"
+                                        disabled={uploadingImage}
+                                    />
+                                </label>
+                            ) : (
+                                <div className="relative">
+                                    <img
+                                        src={imagePreview}
+                                        alt="Preview"
+                                        className="w-full h-48 object-cover rounded-lg"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={removeImage}
+                                        className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition"
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            )}
+
+                            {uploadingImage && (
+                                <p className="text-sm text-gray-500 mt-2 flex items-center">
+                                    <Loader2 className="animate-spin h-4 w-4 mr-2" />
+                                    Compressing image...
+                                </p>
+                            )}
                         </div>
 
                         {/* Required Amount */}

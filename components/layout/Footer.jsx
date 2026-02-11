@@ -52,7 +52,7 @@ export default function Footer() {
                     <div>
                         <h3 className="text-white font-semibold mb-6">Resources</h3>
                         <ul className="space-y-3 text-sm">
-                            <li><Link href="/safety" className="hover:text-primary-400 transition">Safety Tips</Link></li>
+                            <li><Link href="/safety-tips" className="hover:text-primary-400 transition">Safety Tips</Link></li>
                             <li><Link href="/faq" className="hover:text-primary-400 transition">FAQ</Link></li>
                             <li><Link href="/partners" className="hover:text-primary-400 transition">Community Partners</Link></li>
                             <li><Link href="/blog" className="hover:text-primary-400 transition">Success Stories</Link></li>
@@ -65,7 +65,7 @@ export default function Footer() {
                         <ul className="space-y-4 text-sm">
                             <li className="flex items-start gap-3">
                                 <Mail className="h-5 w-5 text-gray-500 mt-0.5" />
-                                <span>support@zakatonboard.com</span>
+                                <span></span>
                             </li>
                             <li className="flex items-start gap-3">
                                 <Phone className="h-5 w-5 text-gray-500 mt-0.5" />
@@ -73,7 +73,7 @@ export default function Footer() {
                             </li>
                             <li className="flex items-start gap-3">
                                 <MapPin className="h-5 w-5 text-gray-500 mt-0.5" />
-                                <span>123 Charity Lane, Community Center,<br />Mumbai, India 400001</span>
+                                <span>Tughkabad ,<br />New Delhi, India 110019</span>
                             </li>
                         </ul>
                     </div>
