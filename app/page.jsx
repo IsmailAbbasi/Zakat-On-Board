@@ -92,7 +92,7 @@ export default function Home() {
 
                     <div className="flex justify-center gap-4">
                         <a
-                            href="/create-request"
+                            href="/create"
                             onClick={handleCreateRequest}
                             className="px-8 py-4 bg-primary-600 text-white rounded-full font-bold text-lg hover:bg-primary-700 transition shadow-lg hover:shadow-primary-500/30 flex items-center gap-2"
                         >
