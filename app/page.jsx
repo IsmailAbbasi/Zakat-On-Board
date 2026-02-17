@@ -7,6 +7,7 @@ import SearchArea from '@/components/SearchArea';
 import PostCard from '@/components/PostCard';
 import ReportModal from '@/components/ReportModal';
 import { useUser } from '@/lib/hooks/useUser';
+import { createClient } from '@/lib/supabase/client';
 
 export default function Home() {
     const { user } = useUser();
@@ -47,6 +48,16 @@ export default function Home() {
             setShowLoginReminder(true);
         }
         // If user is logged in, the link will navigate normally
+    };
+
+    const handleSignIn = async () => {
+        const supabase = createClient();
+        await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin}/auth/callback`,
+            },
+        });
     };
 
     const handleReport = (postId) => {
@@ -228,12 +239,12 @@ export default function Home() {
                                 Please sign in to create a charity request. You need to be logged in to submit and manage your requests.
                             </p>
                             <div className="flex flex-col gap-3">
-                                <a
-                                    href="/auth/signin"
+                                <button
+                                    onClick={handleSignIn}
                                     className="w-full px-6 py-3 bg-primary-600 text-white rounded-full font-bold hover:bg-primary-700 transition shadow-lg hover:shadow-primary-500/30"
                                 >
                                     Sign In Now
-                                </a>
+                                </button>
                                 <button
                                     onClick={() => setShowLoginReminder(false)}
                                     className="w-full px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition"
