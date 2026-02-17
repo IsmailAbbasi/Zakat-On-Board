@@ -1,0 +1,16 @@
+# Netlify configuration
+
+# Redirect branch deploys to primary domain
+[[redirects]]
+  from = "https://main--zakat-onboard.netlify.app/*"
+  to = "https://zakat-onboard.netlify.app/:splat"
+  status = 301
+  force = true
+
+# Redirect all branch deploys to primary
+[[redirects]]
+  from = "https://*--zakat-onboard.netlify.app/*"
+  to = "https://zakat-onboard.netlify.app/:splat"
+  status = 301
+  force = true
+  conditions = {Branch = ["!main"]}
