@@ -29,10 +29,8 @@ export default function Footer() {
                             Connect with those in need near you and make a real difference today.
                         </p>
                         <div className="flex gap-4 pt-2">
-                            <a href="#" className="hover:text-white transition"><Facebook className="h-5 w-5" /></a>
-                            <a href="#" className="hover:text-white transition"><Twitter className="h-5 w-5" /></a>
-                            <a href="#" className="hover:text-white transition"><Instagram className="h-5 w-5" /></a>
-                            <a href="#" className="hover:text-white transition"><Linkedin className="h-5 w-5" /></a>
+
+                            <a href="https://www.linkedin.com/in/mohd-ismail-abbasi-bba550228/" className="hover:text-white transition"><Linkedin className="h-5 w-5" /></a>
                         </div>
                     </div>
 
@@ -65,12 +63,9 @@ export default function Footer() {
                         <ul className="space-y-4 text-sm">
                             <li className="flex items-start gap-3">
                                 <Mail className="h-5 w-5 text-gray-500 mt-0.5" />
-                                <span></span>
+                                <span>ismailabbasi118@gmail.com</span>
                             </li>
-                            <li className="flex items-start gap-3">
-                                <Phone className="h-5 w-5 text-gray-500 mt-0.5" />
-                                <span>+91 98765 43210</span>
-                            </li>
+
                             <li className="flex items-start gap-3">
                                 <MapPin className="h-5 w-5 text-gray-500 mt-0.5" />
                                 <span>Tughkabad ,<br />New Delhi, India 110019</span>
