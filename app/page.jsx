@@ -14,6 +14,7 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const [reportingPostId, setReportingPostId] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [showLoginReminder, setShowLoginReminder] = useState(false);
 
     useEffect(() => {
         fetchPosts();
@@ -38,6 +39,14 @@ export default function Home() {
 
     const handleSearch = (query) => {
         setSearchQuery(query);
+    };
+
+    const handleCreateRequest = (e) => {
+        if (!user) {
+            e.preventDefault();
+            setShowLoginReminder(true);
+        }
+        // If user is logged in, the link will navigate normally
     };
 
     const handleReport = (postId) => {
@@ -72,10 +81,11 @@ export default function Home() {
 
                     <div className="flex justify-center gap-4">
                         <a
-                            href="/contact"
+                            href="/create-request"
+                            onClick={handleCreateRequest}
                             className="px-8 py-4 bg-primary-600 text-white rounded-full font-bold text-lg hover:bg-primary-700 transition shadow-lg hover:shadow-primary-500/30 flex items-center gap-2"
                         >
-                            Contact Us
+                            Create Request
                         </a>
                     </div>
                 </div>
@@ -83,7 +93,7 @@ export default function Home() {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 -mt-20 relative z-20">
                 {/* Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 transform hover:-translate-y-1 transition duration-300">
                         <div className="flex items-center justify-between mb-4">
                             <div className="p-3 bg-green-50 rounded-xl">
@@ -120,6 +130,16 @@ export default function Home() {
                         </h3>
                         <p className="text-gray-500 font-medium">Total Raised</p>
                     </div>
+                </div>
+
+                {/* Contact Us Button */}
+                <div className="flex justify-center mb-8">
+                    <a
+                        href="/contact"
+                        className="px-8 py-4 bg-primary-600 text-white rounded-full font-bold text-lg hover:bg-primary-700 transition shadow-lg hover:shadow-primary-500/30 flex items-center gap-2"
+                    >
+                        Contact Us
+                    </a>
                 </div>
 
                 <DisclaimerBanner />
@@ -191,6 +211,39 @@ export default function Home() {
                         setReportingPostId(null);
                     }}
                 />
+            )}
+
+            {/* Login Reminder Modal */}
+            {showLoginReminder && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 transform transition-all">
+                        <div className="text-center">
+                            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-primary-100 mb-4">
+                                <Heart className="h-8 w-8 text-primary-600" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                                Login Required
+                            </h3>
+                            <p className="text-gray-600 mb-6 leading-relaxed">
+                                Please sign in to create a charity request. You need to be logged in to submit and manage your requests.
+                            </p>
+                            <div className="flex flex-col gap-3">
+                                <a
+                                    href="/auth/signin"
+                                    className="w-full px-6 py-3 bg-primary-600 text-white rounded-full font-bold hover:bg-primary-700 transition shadow-lg hover:shadow-primary-500/30"
+                                >
+                                    Sign In Now
+                                </a>
+                                <button
+                                    onClick={() => setShowLoginReminder(false)}
+                                    className="w-full px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition"
+                                >
+                                    Maybe Later
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
