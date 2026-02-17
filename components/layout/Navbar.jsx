@@ -20,34 +20,12 @@ export default function Navbar() {
         });
     };
 
-    const handleSignOut = () => {
-        console.log('🔴 Signing out - deleting cookies directly');
+    const handleSignOut = async () => {
+        const supabase = createClient();
+        await supabase.auth.signOut();
 
-        // Get all cookies
-        const cookies = document.cookie.split(';');
-        console.log('🔵 Found cookies:', cookies.length);
-
-        // Delete ALL cookies (not just Supabase ones)
-        for (let cookie of cookies) {
-            const eqPos = cookie.indexOf('=');
-            const name = eqPos > -1 ? cookie.substring(0, eqPos).trim() : cookie.trim();
-
-            // Delete with multiple path variations to ensure removal
-            const paths = ['/', '/auth', '/auth/callback'];
-            paths.forEach(path => {
-                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path};`;
-                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=localhost;`;
-            });
-
-            console.log('🗑️ Deleted:', name);
-        }
-
-        console.log('✅ All cookies deleted, redirecting in 200ms...');
-
-        // Small delay to ensure cookies are deleted, then force reload
-        setTimeout(() => {
-            window.location.href = '/?_t=' + Date.now();
-        }, 200);
+        // Redirect to home page
+        window.location.href = '/';
     };
 
     return (
